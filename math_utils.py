@@ -52,6 +52,14 @@ def fold(X, mode, shape):
     arr = np.reshape(X, tuple(shape_array[order[0]],) + tuple(shape_array[order[1]]))
     arr = np.transpose(arr, np.argsort(order[0] + order[1]))
     return arr
+
+def shrink(X, thres):
+    """Soft thresholding the singular values of a matrix"""
+    [U, S, V] = np.linalg.svd(X,full_matrices=False)
+    S = np.maximum(S - thres,0)
+    return np.dot(np.dot(U,  np.diag(S)), V)
+
+
 def tensor_norm(X, p):
     """ norm (measure) for tensor array """
     X_v = np.ndarray.flatten(X)
